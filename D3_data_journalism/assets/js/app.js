@@ -156,12 +156,22 @@ var yLinearScale = yScale(censusData, chosenY);
  var bottomAxis = d3.axisBottom(xLinearScale);
  var leftAxis = d3.axisLeft(yLinearScale);
 
-// Create labels for circles on initial plot
- var circlesLabels = svg.selectAll("text")    
+// Append initial circles
+var circlesGroup = chartGroup.selectAll("circle")
+  .data(censusData)
+  .enter()
+  .append("circle")
+  .attr("cx", d => xLinearScale(d[chosenX]))
+  .attr("cy", d => yLinearScale(d.healthcare))
+  .attr("r", 15)
+  .classed("stateCircle", true);
+
+  // Create labels for circles on initial plot
+var circlesLabels = chartGroup.selectAll("text")    
  .data(censusData)
  .enter()
  .append("text")
- .attr("transform", `translate(${margin.left}, ${margin.top})`)
+ //.attr("transform", `translate(${margin.left}, ${margin.top})`)
  .attr("x", d => xLinearScale(d[chosenX]))
  .attr("y", d => yLinearScale(d.healthcare) + 6)
  .text(d => d.abbr)
@@ -177,15 +187,7 @@ var xAxis = chartGroup.append("g")
 chartGroup.append("g")
 .call(leftAxis);
 
-// append initial circles
-var circlesGroup = chartGroup.selectAll("circle")
-  .data(censusData)
-  .enter()
-  .append("circle")
-  .attr("cx", d => xLinearScale(d[chosenX]))
-  .attr("cy", d => yLinearScale(d.healthcare))
-  .attr("r", 15)
-  .classed("stateCircle", true);
+
   
 
 
