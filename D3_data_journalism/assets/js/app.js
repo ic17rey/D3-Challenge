@@ -205,6 +205,97 @@ function updateToolTipY(chosenY, circlesGroup) {
   return circlesGroup;
 }
 
+// Circles labels need new tooltip (for a selection on x-axis)
+function updateToolTipLabels(chosenX, circlesLabels) {
+
+  var label;
+
+  if (chosenX === "poverty") {
+    label = "Poverty (%):";
+  }
+  else if (chosenX === "age") {
+    label = "Age (Median):";
+  }
+  else {
+    label = "Household Income:";
+  }
+
+  var labelY;
+
+  if (chosenY === "healthcare") {
+    labelY = "Lacks Healthcare (%):";
+  }
+  else if (chosenY === "smokes") {
+    labelY = "Smokes (%):";
+  }
+  else {
+    labelY = "Obesity (%):";
+  }
+
+  var toolTip = d3.tip()
+    .attr("class", "d3-tip")
+    //.offset([80, -60])
+    .html(function(d) {
+  return (`${d.state}<br>${label} ${d[chosenX]}<br>${labelY} ${d[chosenY]}`);
+  });
+
+  circlesLabels.call(toolTip);
+
+  circlesLabels.on("mouseover", function(data) {
+    toolTip.show(data, this);
+  })
+    
+  .on("mouseout", function(data) {
+    toolTip.hide(data, this);
+  });
+  return circlesLabels;
+}
+
+// Circles labels need new tooltip (for a selection on y-axis)
+function updateToolTipLabelsY(chosenY, circlesLabels) {
+
+  var label;
+
+  if (chosenX === "poverty") {
+    label = "Poverty (%):";
+  }
+  else if (chosenX === "age") {
+    label = "Age (Median):";
+  }
+  else {
+    label = "Household Income:";
+  }
+
+  var labelY;
+
+  if (chosenY === "healthcare") {
+    labelY = "Lacks Healthcare (%):";
+  }
+  else if (chosenY === "smokes") {
+    labelY = "Smokes (%):";
+  }
+  else {
+    labelY = "Obesity (%):";
+  }
+
+  var toolTip = d3.tip()
+    .attr("class", "d3-tip")
+    //.offset([80, -60])
+    .html(function(d) {
+  return (`${d.state}<br>${label} ${d[chosenX]}<br>${labelY} ${d[chosenY]}`);
+  });
+
+  circlesLabels.call(toolTip);
+
+  circlesLabels.on("mouseover", function(data) {
+    toolTip.show(data, this);
+  })
+    
+  .on("mouseout", function(data) {
+    toolTip.hide(data, this);
+  });
+  return circlesLabels;
+}
 
 // ============
 // Read in Data from CSV and use it to load all initial info to the scatter plot 
@@ -316,7 +407,7 @@ var obesityLabel = labelsGroupY.append("text")
   .text("Obesity (%)");
  
 var circlesGroup = updateToolTip(chosenX, circlesGroup);
-
+var circlesLabels = updateToolTip(chosenX, circlesLabels);
 
 // ============
 // Event listeners, for changes x or y axis labels 
@@ -344,7 +435,8 @@ labelsGroup.selectAll("text")
     
     // Updates tooltips with new info
     circlesGroup = updateToolTip(chosenX, circlesGroup);
-
+    circlesLabels = updateToolTipLabels(chosenX, circlesLabels);
+    
     // Change classes to change bold text
     if (chosenX === "poverty") {
       povertyLabel
@@ -405,7 +497,7 @@ labelsGroupY.selectAll("text")
     
     // updates tooltips with new info
     circlesGroup = updateToolTipY(chosenY, circlesGroup);
-
+    circlesLabels = updateToolTipLabelsY(chosenY, circlesLabels)
     // Change classes to change bold text
     if (chosenY === "healthcare") {
       healthcareLabel
